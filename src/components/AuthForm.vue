@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "AuthForm",
@@ -117,29 +117,28 @@ export default {
     async login(data) {
       await axios
         .post("auth/signin", data)
-        .then((response) => {localStorage.setItem("token", response.data.token);
-        console.log(response.data)})
+        .then((response) => {
+          localStorage.setItem("token", response.data.token);
+          this.$store.dispatch("user",response.data.userId)
+          this.$router.push("/");
+        })
         .catch(() => alert("Incorrect email or password"));
     },
 
     handleSubmit() {
       if (this.isLogingIn) {
-
         const data = {
           email: this.email,
           password: this.password,
         };
         this.login(data);
-
       } else {
-
         const data = {
           name: this.name,
           email: this.email,
           password: this.password,
         };
         this.signup(data);
-
       }
     },
   },
@@ -217,7 +216,7 @@ input {
 
 .auth_goToSignup-btn {
   margin-left: 0.5em;
-  color: #6c63ff;
+  color: #002442;
   background-color: transparent;
   cursor: pointer;
   vertical-align: center;
@@ -231,8 +230,8 @@ input {
   padding-right: 30px;
   cursor: pointer;
   color: #fff;
-  background-color: #6c63ff;
-  border-color: #6c63ff;
+  background-color: #002442;
+  border-color: #002442;
   font-weight: 600;
   text-align: center;
   vertical-align: middle;
@@ -245,7 +244,7 @@ input {
 }
 
 .auth_form-submit-btn:hover {
-  background-color: #3a368a;
-  border-color: #3a368a;
+  background-color: #001325;
+  border-color: #001325;
 }
 </style>
