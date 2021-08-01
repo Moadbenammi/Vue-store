@@ -2,43 +2,59 @@
   <div class="home">
     <Navbar />
     <div class="hero">
-      <img src="../assets/stary.png" alt="hero-background">
-      <h1 >Find everything you want!</h1>
+      <img src="../assets/stary.png" alt="hero-background" />
+      <h1>Find everything you want!</h1>
       <div class="transition"></div>
     </div>
     <div class="cards-container">
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
+      <ProductCard v-for="product in products" :key="product.id" :product="product" />
     </div>
-    
   </div>
 </template>
 
 <script>
-import Navbar from "../components/Navbar.vue"
-import ProductCard from "../components/ProductCard.vue"
+import axios from "axios";
+import Navbar from "../components/Navbar.vue";
+import ProductCard from "../components/ProductCard.vue";
 export default {
-
-  name: 'Home',
+  name: "Home",
 
   components: {
     Navbar,
-    ProductCard
+    ProductCard,
+  },
+
+  data() {
+    return {
+      products: [],
+    };
+  },
+
+  created() {
+    setInterval(async () => {
+      await axios
+        .get("/products")
+        .then((response) => this.products = response.data)
+        .catch((error) => console.log(error));
+    }, 5000);
   },
 }
 </script>
 
 <style>
-.transition{
+.transition {
   width: 100%;
-  background:  linear-gradient(to bottom, rgba(0,36,66,1), rgba(250,250,250,.2) );
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 36, 66, 1),
+    rgba(250, 250, 250, 0.2)
+  );
   height: 200px;
   z-index: -1;
   margin-bottom: -150px;
 }
 
-.cards-container{
+.cards-container {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -46,17 +62,17 @@ export default {
   height: inherit;
 }
 
-.hero{
+.hero {
   width: 100%;
   position: relative;
   text-align: center;
 }
 
-.hero img{
+.hero img {
   width: 100%;
 }
 
-.hero h1{
+.hero h1 {
   font-family: pacifico;
   font-weight: 400;
   font-size: 4vw;
@@ -65,5 +81,4 @@ export default {
   top: 8px;
   left: 50px;
 }
-
 </style>

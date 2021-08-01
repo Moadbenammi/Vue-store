@@ -2,37 +2,45 @@
   <nav class="navbar">
     <router-link to="/" class="brand-name">Store</router-link>
     <div class="navbar-btns">
-      <div
-        v-if="user"
-        class="navbar-btn"
-      >
+      <div v-if="userId" class="navbar-btn" @click="showModal">
         Add Item
       </div>
-      <div v-if="!user" class="navbar-btn" @click="$router.push('/auth')">
+      <div v-if="!userId" class="navbar-btn" @click="$router.push('/auth')">
         Login
       </div>
-      <div v-if="user" class="navbar-btn" @click="logout"> Logout </div>
+      <div v-if="userId" class="navbar-btn" @click="logout">Logout</div>
     </div>
   </nav>
+  <Modal v-if="isOpen" > </Modal>
 </template>
 <script>
 import { mapGetters } from "vuex";
+
+import Modal from "./ProductModal.vue";
 export default {
   name: "Navbar",
-  computed: {
-    ...mapGetters(["user"]),
+  components: {
+    Modal,
   },
+  computed: {
+    ...mapGetters(["userId","isOpen"]),
+  },
+  
   methods: {
     logout() {
       localStorage.removeItem("token");
-      this.$store.dispatch("user", null);
+      this.$store.dispatch("setUserId", null);
     },
+
+    showModal() {
+      this.$store.dispatch('showModal')
+      this.$store.commit('switchToCreate')
+    }
   },
 };
 </script>
 
 <style>
-
 .navbar {
   background-color: #001325;
   color: white;
@@ -54,22 +62,22 @@ export default {
   cursor: pointer;
 }
 
-.navbar-btns{
+.navbar-btns {
   display: flex;
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .navbar-btn {
   padding: 0.2em 1em;
   cursor: pointer;
-  font-family:  "Pacifico", sans-serif;
+  font-family: "Pacifico", sans-serif;
 }
 
 .navbar-btn:not(:last-child) {
   border-right: 1px white solid;
 }
 
-.navbar-btn:hover{
-  transform : scale(1.2);
+.navbar-btn:hover {
+  transform: scale(1.2);
 }
 </style>

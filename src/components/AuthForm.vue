@@ -48,13 +48,13 @@
 
       <div v-if="isLogingIn" class="auth_goToSignup-btn-container">
         <span>You don't have an account?</span>
-        <span @click="switchOperation" class="auth_goToSignup-btn"
+        <span @click="$store.dispatch('switchOperations')" class="auth_goToSignup-btn"
           >Sign up</span
         >
       </div>
       <div v-if="!isLogingIn" class="auth_goToSignup-btn-container">
         <span>Already have an account?</span>
-        <span @click="switchOperation" class="auth_goToSignup-btn">Login</span>
+        <span @click="$store.dispatch('switchOperations')" class="auth_goToSignup-btn">Login</span>
       </div>
       <input
         class="auth_form-submit-btn"
@@ -66,13 +66,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AuthForm",
   data() {
     return {
-      isLogingIn: true,
       name: "",
       email: "",
       password: "",
@@ -81,6 +80,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["isLogingIn"]),
+
     currentOperation() {
       if (this.isLogingIn) {
         return "Login";
@@ -95,50 +96,21 @@ export default {
       this.passwordVisibility =
         this.passwordVisibility == "password" ? "text" : "password";
     },
-
-    switchOperation() {
-      this.isLogingIn = !this.isLogingIn;
-      this.name = "";
-      this.email = "";
-      this.password = "";
-      this.passwordVisibility = "password";
-    },
-
-    async signup(data) {
-      await axios
-        .post("auth/signup", data)
-        .then(() => {
-          alert("Registred successfully, now go ahead and login !");
-          this.switchOperation();
-        })
-        .catch(() => alert("Email already exist !"));
-    },
-
-    async login(data) {
-      await axios
-        .post("auth/signin", data)
-        .then((response) => {
-          localStorage.setItem("token", response.data.token);
-          this.$store.dispatch("user",response.data.userId)
-          this.$router.push("/");
-        })
-        .catch(() => alert("Incorrect email or password"));
-    },
-
+    
     handleSubmit() {
       if (this.isLogingIn) {
         const data = {
           email: this.email,
           password: this.password,
         };
-        this.login(data);
+        this.$store.dispatch('signin',data);
       } else {
         const data = {
           name: this.name,
           email: this.email,
           password: this.password,
         };
-        this.signup(data);
+        this.$store.dispatch('signup',data);
       }
     },
   },
@@ -171,7 +143,7 @@ form {
   display: flex;
   overflow: hidden;
   margin-bottom: 0;
-  padding: 15px 15px;
+  padding: 15px;
   border-bottom: none;
   position: relative;
   background: #edf2f5;
