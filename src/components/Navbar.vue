@@ -2,40 +2,39 @@
   <nav class="navbar">
     <router-link to="/" class="brand-name">Store</router-link>
     <div class="navbar-btns">
-      <div v-if="userId" class="navbar-btn" @click="showModal">
-        Add Item
-      </div>
+      <div v-if="userId" class="navbar-btn" @click="showModal">Add Item</div>
       <div v-if="!userId" class="navbar-btn" @click="$router.push('/auth')">
         Login
       </div>
       <div v-if="userId" class="navbar-btn" @click="logout">Logout</div>
     </div>
   </nav>
-  <Modal v-if="isOpen" > </Modal>
+  <Modal v-if="isOpen"> </Modal>
 </template>
 <script>
+import axios from "axios";
 import { mapGetters } from "vuex";
-
 import Modal from "./ProductModal.vue";
+
 export default {
   name: "Navbar",
   components: {
     Modal,
   },
   computed: {
-    ...mapGetters(["userId","isOpen"]),
+    ...mapGetters(["userId", "isOpen"]),
   },
-  
+
   methods: {
     logout() {
-      localStorage.removeItem("token");
+      axios.defaults.headers.common["Authorization"] = "";
       this.$store.dispatch("setUserId", null);
     },
 
     showModal() {
-      this.$store.dispatch('showModal')
-      this.$store.commit('switchToCreate')
-    }
+      this.$store.dispatch("showModal");
+      this.$store.commit("switchToCreate");
+    },
   },
 };
 </script>

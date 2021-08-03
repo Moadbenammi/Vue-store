@@ -27,11 +27,11 @@ export const userModule = {
             commit('switchOperations')
         },
 
-        signin : async ({commit}, data) => {
+        async signin ({commit}, data) {
             await axios
                 .post("auth/signin", data)
                 .then((response) => {
-                localStorage.setItem('token', response.data.token);
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                 commit('setUserId', response.data.userId)
                 router.push("/");
                 })

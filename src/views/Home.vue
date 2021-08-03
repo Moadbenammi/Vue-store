@@ -7,15 +7,20 @@
       <div class="transition"></div>
     </div>
     <div class="cards-container">
-      <ProductCard v-for="product in products" :key="product.id" :product="product" />
+      <ProductCard
+        v-for="product in products"
+        :key="product.id"
+        :product="product"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import Navbar from "../components/Navbar.vue";
 import ProductCard from "../components/ProductCard.vue";
+import { mapGetters } from "vuex";
+
 export default {
   name: "Home",
 
@@ -24,21 +29,15 @@ export default {
     ProductCard,
   },
 
-  data() {
-    return {
-      products: [],
-    };
+  computed: {
+    ...mapGetters(["products"]),
   },
 
-  created() {
-    setInterval(async () => {
-      await axios
-        .get("/products")
-        .then((response) => this.products = response.data)
-        .catch((error) => console.log(error));
-    }, 5000);
+  mounted() {
+    this.$store.dispatch('getProducts');
   },
-}
+
+};
 </script>
 
 <style>

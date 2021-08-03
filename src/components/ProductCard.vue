@@ -5,11 +5,12 @@
     </div>
     <div class="product-info">
       <div class="product-text">
-        <span
+        <img
           v-if="isEditable"
-          @click="this.$store.dispatch('deleteProduct',product._id)"
-          class="product-delete-btn fa fa-trash"
-        ></span>
+          src="../assets/icon-trash.svg"
+          @click="this.$store.dispatch('deleteProduct', product._id)"
+          class="product-delete-btn trash-icon"
+        />
         <h1>{{ product.title }}</h1>
         <h2>by store</h2>
         <p>
@@ -37,6 +38,7 @@ export default {
 
   computed: {
     ...mapGetters(["userId"]),
+
     isEditable() {
       if (this.product.userId == this.userId) {
         return true;
@@ -102,12 +104,10 @@ export default {
   margin-top: 9px;
   float: right;
   cursor: pointer;
-  color: #001325;
   padding: 0.3em;
 }
 
 .product-delete-btn:hover {
-  color: #002442;
   border-radius: 50px;
   background-color: #0087f563;
 }

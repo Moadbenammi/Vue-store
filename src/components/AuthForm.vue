@@ -48,13 +48,19 @@
 
       <div v-if="isLogingIn" class="auth_goToSignup-btn-container">
         <span>You don't have an account?</span>
-        <span @click="$store.dispatch('switchOperations')" class="auth_goToSignup-btn"
+        <span
+          @click="$store.dispatch('switchOperations')"
+          class="auth_goToSignup-btn"
           >Sign up</span
         >
       </div>
       <div v-if="!isLogingIn" class="auth_goToSignup-btn-container">
         <span>Already have an account?</span>
-        <span @click="$store.dispatch('switchOperations')" class="auth_goToSignup-btn">Login</span>
+        <span
+          @click="$store.dispatch('switchOperations')"
+          class="auth_goToSignup-btn"
+          >Login</span
+        >
       </div>
       <input
         class="auth_form-submit-btn"
@@ -96,21 +102,21 @@ export default {
       this.passwordVisibility =
         this.passwordVisibility == "password" ? "text" : "password";
     },
-    
+
     handleSubmit() {
       if (this.isLogingIn) {
         const data = {
           email: this.email,
           password: this.password,
         };
-        this.$store.dispatch('signin',data);
+        this.$store.dispatch("signin", data);
       } else {
         const data = {
           name: this.name,
           email: this.email,
           password: this.password,
         };
-        this.$store.dispatch('signup',data);
+        this.$store.dispatch("signup", data);
       }
     },
   },
