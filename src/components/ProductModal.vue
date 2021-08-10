@@ -47,6 +47,7 @@
               <div class="input-container">
                 <input
                   type="number"
+                  step="0.01"
                   required
                   name="price"
                   min="1"
